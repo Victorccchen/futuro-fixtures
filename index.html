@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
+<meta name="googlebot" content="noindex, nofollow">
+<meta name="referrer" content="no-referrer">
+<title>FUTURO U8／U9 足球賽事情報行事曆</title>
+<style>
+  :root{
+    --registered:#16a34a;
+    --open:#2563eb;
+    --closing:#ea580c;
+    --closed:#94a3b8;
+    --unverified:#d97706;
+    --ineligible:#dc2626;
+    --ink:#0f172a;
+    --muted:#64748b;
+    --line:#e2e8f0;
+    --bg:#f8fafc;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;padding:28px 20px 60px;
+    font-family:"PingFang TC","Noto Sans TC","Microsoft JhengHei",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    color:var(--ink);background:var(--bg);line-height:1.55;
+  }
+  .wrap{max-width:1180px;margin:0 auto}
+  header.top{border-bottom:3px solid var(--ink);padding-bottom:14px;margin-bottom:22px}
+  h1{font-size:26px;margin:0 0 4px;letter-spacing:.5px}
+  .sub{color:var(--muted);font-size:13px}
+  .legend{display:flex;flex-wrap:wrap;gap:14px;margin:16px 0 26px;padding:12px 14px;background:#fff;border:1px solid var(--line);border-radius:10px}
+  .lg{display:flex;align-items:center;gap:6px;font-size:12.5px;font-weight:600}
+  .dot{width:11px;height:11px;border-radius:50%;display:inline-block;flex:0 0 auto}
+  .dot.registered{background:var(--registered)}
+  .dot.open{background:var(--open)}
+  .dot.closing{background:var(--closing)}
+  .dot.closed{background:var(--closed)}
+  .dot.unverified{background:var(--unverified)}
+  .dot.ineligible{background:var(--ineligible)}
+  .lg .note{color:var(--muted);font-weight:400;font-size:11.5px}
+
+  section.panel{background:#fff;border:1px solid var(--line);border-radius:10px;padding:16px 18px;margin-bottom:16px}
+  section.panel h2{font-size:15px;margin:0 0 10px;padding-bottom:7px;border-bottom:2px solid var(--ink)}
+  .panel ul{margin:0;padding-left:18px}
+  .panel li{margin:5px 0;font-size:13.5px}
+  .kpi{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px}
+  .kpi div{flex:1 1 150px;background:#fff;border:1px solid var(--line);border-left:4px solid var(--ink);border-radius:8px;padding:10px 12px}
+  .kpi .n{font-size:22px;font-weight:700;line-height:1.1}
+  .kpi .l{font-size:11.5px;color:var(--muted)}
+
+  .month{display:grid;grid-template-columns:330px 1fr;gap:20px;background:#fff;border:1px solid var(--line);border-radius:10px;padding:16px 18px;margin-bottom:14px;align-items:start}
+  @media(max-width:820px){.month{grid-template-columns:1fr}}
+  .mtitle{font-size:15px;font-weight:700;margin:0 0 10px}
+  table.cal{width:100%;border-collapse:collapse;table-layout:fixed}
+  table.cal th{font-size:11px;color:var(--muted);font-weight:600;padding:4px 0;text-align:center}
+  table.cal td{height:44px;vertical-align:top;text-align:center;border:1px solid #f1f5f9;padding:3px 0;position:relative}
+  table.cal td.sun,table.cal td.sat{background:#fcfcfd}
+  .dnum{font-size:11.5px;color:#334155}
+  .dots{display:flex;gap:2px;justify-content:center;margin-top:3px;flex-wrap:wrap}
+  .dots .dot{width:7px;height:7px}
+  td.has .dnum{font-weight:700;color:var(--ink)}
+  td.today{background:#fef9c3!important;outline:2px solid #facc15;outline-offset:-2px}
+  td.today .dnum{font-weight:800}
+  .month.cur{border-color:var(--ink);box-shadow:0 0 0 1px var(--ink)}
+  .nowtag{font-size:10.5px;font-weight:700;background:var(--ink);color:#fff;padding:1px 8px;border-radius:20px;vertical-align:middle;margin-left:5px}
+  .empty{font-size:12.5px;color:#94a3b8;padding:10px 2px;font-style:italic}
+
+  .weeks{display:flex;flex-direction:column;gap:9px}
+  .wk{border-left:3px solid var(--line);padding-left:11px}
+  .wklabel{font-size:11px;color:var(--muted);font-weight:600;margin-bottom:4px}
+  .ev{display:flex;gap:9px;align-items:flex-start;padding:6px 9px;border-radius:7px;background:#fbfcfe;border:1px solid #eef2f7;margin-bottom:5px}
+  .ev .bar{width:4px;align-self:stretch;border-radius:3px;flex:0 0 auto}
+  .ev .body{flex:1;min-width:0}
+  .ev .nm{font-size:13px;font-weight:700;line-height:1.35}
+  .ev .meta{font-size:11.5px;color:var(--muted);margin-top:2px}
+  .tag{display:inline-block;font-size:10.5px;font-weight:700;padding:1px 7px;border-radius:20px;color:#fff;vertical-align:middle;margin-left:6px}
+  .tag.registered{background:var(--registered)}
+  .tag.open{background:var(--open)}
+  .tag.closing{background:var(--closing)}
+  .tag.closed{background:var(--closed)}
+  .tag.unverified{background:var(--unverified)}
+  .tag.ineligible{background:var(--ineligible)}
+  .ev.ineligible{background:#fff5f5;border-color:#fecaca}
+  a{color:#2563eb;text-decoration:none}
+  a:hover{text-decoration:underline}
+  footer{margin-top:28px;font-size:11.5px;color:var(--muted);border-top:1px solid var(--line);padding-top:12px}
+  table.card{width:100%;border-collapse:collapse;font-size:12.5px;margin-top:6px}
+  table.card th,table.card td{border:1px solid var(--line);padding:6px 8px;text-align:left;vertical-align:top}
+  table.card th{background:#f8fafc;font-weight:700;white-space:nowrap;width:130px}
+
+  /* ===== 回報新賽事 對話框 ===== */
+  #submit-panel{border:2px solid var(--open);background:#fff}
+  #submit-panel h2{border-bottom-color:var(--open)}
+  .flow{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:11.5px;color:var(--muted);margin:0 0 14px;padding:9px 11px;background:#f1f5f9;border-radius:7px}
+  .flow b{color:var(--ink)}
+  .flow .arw{color:#94a3b8}
+  .dropbox{
+    display:flex;flex-wrap:wrap;gap:14px;align-items:center;
+    background:#eff6ff;border:1px dashed #93c5fd;border-radius:10px;padding:16px 18px;
+  }
+  .dbtext{flex:1 1 240px}
+  .dbhead{font-size:15px;font-weight:700}
+  .dbsub{font-size:12.5px;color:var(--muted);margin-top:3px}
+  .cta{
+    display:inline-block;background:var(--open);color:#fff;font-weight:700;font-size:13px;
+    padding:9px 20px;border-radius:8px;margin-left:auto;
+  }
+  .cta:hover{background:#1d4ed8;text-decoration:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="top">
+  <h1>FUTURO U8／U9 足球賽事情報行事曆</h1>
+  <div class="sub">賽事情報系統 v3.0 ｜ 本次掃描日：2026 年 8 月 10 日（週一）｜ 涵蓋期間：2026/08 – 2027/05 ｜ 對象梯隊：2017、2018 出生<br>
+  <b style="color:#0f172a">收錄範圍：台灣境內賽事</b>（含在台舉辦之國際邀請賽）。海外賽事暫不列入。</div>
+</header>
+
+<div class="legend">
+  <span class="lg"><i class="dot registered"></i>已報名</span>
+  <span class="lg"><i class="dot open"></i>開放報名</span>
+  <span class="lg"><i class="dot closing"></i>即將截止（7天內）</span>
+  <span class="lg"><i class="dot closed"></i>已截止／已結束</span>
+  <span class="lg"><i class="dot unverified"></i>待驗證</span>
+  <span class="lg"><i class="dot ineligible"></i>無法報名（年齡組不符）<span class="note">— 僅列於右側清單，月曆不標點</span></span>
+</div>
+
+<div class="kpi">
+  <div style="border-left-color:#16a34a"><div class="n">1</div><div class="l">已報名（勝利聯賽 U8／U9）</div></div>
+  <div style="border-left-color:#94a3b8"><div class="n">0</div><div class="l">目前開放報名</div></div>
+  <div style="border-left-color:#2563eb"><div class="n">2027/4</div><div class="l">下一個可報名時間點</div></div>
+</div>
+
+<section class="panel">
+  <h2>本期重點</h2>
+  <ul>
+    <li><b style="color:#b45309">2026/9 – 2027/4 台灣沒有可報名的 U8／U9 新賽事。</b>這段期間 FUTURO 的比賽全部來自已報名的勝利聯賽。</li>
+    <li><b style="color:#16a34a">無 7 天內須決策事項。</b></li>
+    <li><b style="color:#2563eb">下一個行動點：2027 年 4 月初，安聯小小世界盃報名</b>（月曆已於 3/25 放提醒）。</li>
+    <li>待驗證 2 項：勝利聯賽全國總決賽日期、安聯小小世界盃 2027 報名期間 — 皆為依歷年規律推估，待官方公告。</li>
+  </ul>
+</section>
+
+<div id="cal"></div>
+
+<section class="panel" id="submit-panel">
+  <h2 style="display:flex;align-items:center;gap:8px">📣 回報新賽事 — 歡迎任何人提供線索</h2>
+
+  <p style="font-size:13px;margin:0 0 10px">
+    發現這份行事曆上沒有的比賽嗎？把官方連結丟進來就好。<b>不限 FUTURO 球隊人員</b>，任何教練、家長、其他球隊行政都歡迎回報。
+  </p>
+
+  <div class="flow">
+    <b>你送出連結</b><span class="arw">→</span>
+    <span>次日排程自動抓取</span><span class="arw">→</span>
+    <span>比對官網／競賽規程／官方 PDF／官方 FB 公告</span><span class="arw">→</span>
+    <b style="color:#16a34a">通過即自動上架</b><span class="arw">／</span>
+    <b style="color:#d97706">未通過則標為「待驗證」並註明原因</b>
+  </div>
+
+  <div class="dropbox">
+    <div class="dbtext">
+      <div class="dbhead">把網址貼進收件匣就好</div>
+      <div class="dbsub">一行一個，不用填表、不用登入、不用留名字。貼完直接關掉，不用存檔。</div>
+    </div>
+    <a class="cta" id="inboxLink" href="https://docs.google.com/document/d/1YA89p4XzfZGnhT0JsCvlz7Z_TDtbe50jU2c7jIoRe8k/edit" target="_blank" rel="noopener">📋 打開連結收件匣</a>
+  </div>
+
+  <p style="font-size:11.5px;color:var(--muted);margin:13px 0 0;border-top:1px solid var(--line);padding-top:10px">
+    ⓘ 貼上的連結不會立刻出現在這個頁面上。掃描排程每日執行一次，通過官方來源驗證後才會上架。<br>
+    收件匣裡的連結處理完會移到文件最下方的「已處理紀錄」——看到自己貼的連結消失了代表已處理完成，不是不見了。每一筆自動上架的賽事都會在下方「賽事資料庫」附上來源連結，可追溯、可回退。
+  </p>
+</section>
+
+<section class="panel">
+  <h2>賽事資料庫</h2>
+  <p style="font-size:12.5px;color:var(--muted);margin:0 0 6px">
+    永久資料卡與歷年規律。收錄範圍：台灣境內賽事（含在台舉辦的國際邀請賽）。海外賽事已封存，需要時可還原。
+  </p>
+
+  <h3 style="font-size:13.5px;margin:16px 0 2px">2026/27 勝利聯賽 Victory League ⚑ 已報名</h3>
+  <table class="card">
+    <tr><th>官方網址</th><td><a href="https://www.victoryleague.com.tw/">victoryleague.com.tw</a>｜<a href="https://www.facebook.com/victoryleaguetaiwan/">Facebook</a>｜<a href="https://www.instagram.com/victory_league_taiwan/">Instagram</a></td></tr>
+    <tr><th>年齡組別</th><td>U6／U8／U9／U10／U11／U12（<b>FUTURO U8、U9 已完成報名</b>）</td></tr>
+    <tr><th>賽區</th><td>台北／新竹／台中／高雄 四大賽區；各區前 3 名晉級全國總決賽</td></tr>
+    <tr><th>賽季期間</th><td>2026/9/20 – 2027/4/25（暫定賽程），全國總決賽預計 2027 年 5 月</td></tr>
+    <tr><th>暫定賽程日</th><td>
+      9月：20｜10月：4、18、25｜11月：1、8、15、22、29｜12月：6、13<br>
+      1月：10、17、24｜2月：7、14、21｜3月：7、14、21｜4月：11、18、25<br>
+      <span style="color:#b45309">※ 官方註明：每隊每月僅出賽 2–3 場，並非每個列出日期都會出賽；表列多以週日為主，實際亦可能安排在週六。</span>
+    </td></tr>
+    <tr><th>賽程異動規則</th><td>若有空檔時段且<b>提前至少兩週</b>通知，聯盟將協助調整賽程；逾期需球隊自行協調換場。如需另外預訂或更換場地，申請球隊須負擔<b>每場 NT$3,000</b></td></tr>
+    <tr><th>報名時程</th><td>2026 年 5 月中開放、<b>5/31 截止（額滿為止）</b>｜上季 U6–U12 逾 240 隊報名</td></tr>
+    <tr><th>資料來源</th><td>官方賽程 PDF（使用者提供，視為已驗證）</td></tr>
+  </table>
+
+  <h3 style="font-size:13.5px;margin:16px 0 2px">安聯小小世界盃（中華民國迷你足球協會）⚑ 下一個可報名目標</h3>
+  <table class="card">
+    <tr><th>主辦／承辦</th><td>社團法人中華民國迷你足球協會｜安聯人壽冠名贊助｜<a href="https://www.facebook.com/rocminisoccer/">協會 Facebook</a></td></tr>
+    <tr><th>年齡組別</th><td>U6／<b>U8</b>／U10／U12／U15 五級別 — <b>U8 梯隊適用</b></td></tr>
+    <tr><th>賽區</th><td>全台七大賽區：台北、新北、新竹、台中、台南、高雄、花蓮</td></tr>
+    <tr><th>2026 年實績</th><td>巡迴預賽 5–8 月；各區晉級隊伍暑期匯聚台北，全國總決賽 8/1</td></tr>
+    <tr><th>報名時程</th><td>2026 年為 <b>4/1 開始、4/17 截止</b>｜2027 年預估同為 4 月初開放（待驗證）</td></tr>
+    <tr><th>行動建議</th><td><b>2027/3/25 前設定提醒</b>，並提前追蹤協會粉專與官網公告</td></tr>
+    <tr><th>FUTURO 參賽紀錄</th><td>待補</td></tr>
+  </table>
+
+  <h3 style="font-size:13.5px;margin:16px 0 2px">Formosa 7s 福爾摩沙國際七人制足球錦標賽（高雄）</h3>
+  <table class="card">
+    <tr><th>官方網址</th><td><a href="https://www.formosasevens.com.tw/">formosasevens.com.tw</a></td></tr>
+    <tr><th>年齡組別</th><td>U8 – U16（<b>U8／U9 適用</b>）</td></tr>
+    <tr><th>2026 年實績</th><td>8/5–9 於高雄楠梓足球場｜192 隊、8–9 國、逾 9,000 名球員與team staff｜由 LALIGA 與柏文健康事業合辦、DAZN 轉播｜赫塔菲 vs 比利亞雷亞爾表演賽開幕｜高雄 Attackers FC 獲 U8 季軍</td></tr>
+    <tr><th>定位</th><td><b>台灣境內規模最大、且設有 U8／U9 組別的國際賽事</b></td></tr>
+    <tr><th>下次預估</th><td>2027 年 8 月上旬；報名預估 2–5 月開放</td></tr>
+  </table>
+
+  <h3 style="font-size:13.5px;margin:16px 0 2px">台灣國際足球邀請賽（原淡水盃，新北淡水）</h3>
+  <table class="card">
+    <tr><th>沿革</th><td>2015 年創辦為「淡水盃國際足球錦標賽」；<b>2026 年第 11 屆起正式更名為「台灣國際足球邀請賽」</b>，獲新北市政府支持升格｜<a href="https://www.facebook.com/tamshuicup/">官方 Facebook</a></td></tr>
+    <tr><th>2026 年實績</th><td>7/31–8/2 於淡水舉行｜含選手、家長、裁判、志工逾 2,000 人參與</td></tr>
+    <tr><th>下次預估</th><td>2027 年 7 月底–8 月初；報名預估 4–6 月開放</td></tr>
+    <tr><th>年齡組別</th><td>U8／U9 是否設組待向主辦確認（歷年為基層足球養成導向，涵蓋幼年梯隊）</td></tr>
+  </table>
+
+  <h3 style="font-size:13.5px;margin:16px 0 2px">確認無 U8／U9 組別（保留備查，月曆不標點）</h3>
+  <table class="card">
+    <tr><th>全國少年盃足球錦標賽<br>（CTFA）</th><td>官方競賽規程僅設<b>公開男子四年級組、五年級組、六年級組，及公開女子四年級組</b>（相當於 U10／U12 以上），無 U8／U9 組別。除非官方公告新增組別，否則不需重複查證。<a href="https://www.ctfa.com.tw/tournament/u12-tournamnet/juvenile-cup/8117-0107.html">競賽規程</a></td></tr>
+    <tr><th>台灣青年足球聯賽<br>（CTFA × 勝利聯賽）</th><td>僅設 <b>U14／U16／U19</b>。2026/27 季報名 7/10–8/9，活動費 U19 NT$45,000、U16 NT$38,550、U14 NT$33,900。<a href="https://www.ctfa.com.tw/latest-news/ctfa-announcement/tyfl-annoucement/8348-2026-27.html">報名公告</a></td></tr>
+  </table>
+
+  <h3 style="font-size:13.5px;margin:16px 0 2px">歷年規律與下一年度開放時間預測</h3>
+  <table class="card">
+    <tr><th>賽事</th><th style="width:auto">歷年舉辦月份 → 預測下一次報名開放</th></tr>
+    <tr><th>安聯小小世界盃</th><td>巡迴預賽 5–8 月、全國決賽 8 月初；報名 4/1–4/17 → <b style="color:#2563eb">2027 年預估 4 月初開放（最近的行動點）</b></td></tr>
+    <tr><th>勝利聯賽</th><td>賽季 9 月–翌年 4 月、全國決賽 5 月；報名 5 月中開放、5/31 截止（額滿為止）→ <b>2027/28 季預估 2027 年 5 月開放</b></td></tr>
+    <tr><th>Formosa 7s</th><td>每年 8 月上旬（2026：8/5–9，高雄楠梓）→ 2027 年報名預估 2–5 月開放</td></tr>
+    <tr><th>台灣國際足球邀請賽</th><td>每年 7 月底–8 月初（2026：7/31–8/2，淡水）→ 2027 年報名預估 4–6 月開放</td></tr>
+  </table>
+
+  <h3 style="font-size:13.5px;margin:16px 0 2px">本次掃描異動紀錄</h3>
+  <table class="card">
+    <tr><th>收錄範圍</th><td>本版起僅收錄台灣境內賽事，海外賽事（曼谷、新加坡、歐美各站）已移出行事曆並另行封存</td></tr>
+    <tr><th>新增賽事</th><td>0 場 — 未發現台灣新公布且設有 U8／U9 組別的賽事</td></tr>
+    <tr><th>已結束</th><td>4 場 — 2026/27 勝利聯賽報名（5/31 截止，已報名）、Formosa 7s（8/5–9）、台灣國際足球邀請賽（7/31–8/2）、安聯小小世界盃（決賽 8/1）</td></tr>
+    <tr><th>資訊異動</th><td>「淡水盃國際足球錦標賽」自 2026 年第 11 屆起更名為「台灣國際足球邀請賽」，獲新北市政府支持升格（通知規則第 18 項）</td></tr>
+    <tr><th>年齡資格確認</th><td>CTFA 全國少年盃、台灣青年足球聯賽經查證確認無 U8／U9 組別，不需重複查證</td></tr>
+  </table>
+</section>
+
+<section class="panel" style="border-left:4px solid #94a3b8">
+  <h2>亞洲賽事參考（不列入行事曆）</h2>
+  <p style="font-size:12.5px;color:var(--muted);margin:0 0 12px">
+    海外賽事僅供評估參考，不納入上方行事曆與通知。以下為設有 <b>U8／U9 組別</b>、且對外開放報名的亞洲賽事。日期為最近一次已確認或官方公告之場次，欲參加請直接向主辦確認當年度資訊。
+  </p>
+
+  <table class="card">
+    <tr>
+      <th style="width:auto">賽事</th>
+      <th style="width:78px">地區</th>
+      <th style="width:104px">時期</th>
+      <th style="width:150px">年齡／賽制</th>
+      <th style="width:auto">備註</th>
+    </tr>
+
+    <tr><td><b><a href="https://hanumancup.com/">Hanuman Cup</a></b></td>
+      <td>泰國<br>曼谷</td><td>12 月上旬<br><span style="color:var(--muted)">2026/12/5–6</span></td>
+      <td>2018／2017 或以下<br>7 人制、4 號球</td>
+      <td>LALIGA、泰國觀光局支持。匯款訂金即算報名序，先到先得。含文化交流活動。</td></tr>
+
+    <tr><td><b><a href="https://biyc7s.cupmanager.net/">Bangkok International Youth Cup（BIYC 7s）</a></b></td>
+      <td>泰國<br>曼谷</td><td>12 月首週末<br><span style="color:var(--muted)">2026/12/5–6</span></td>
+      <td>U8–U18<br>7v7、無越位</td>
+      <td>KMITL 大學，距機場 10–15 分。每隊上限 12 人，含兩日午餐。早鳥約 10 月初、最終截止約 11 月初。</td></tr>
+
+    <tr><td><b><a href="https://biyff7s.cupmanager.net/">Bangkok International Youth Football Festival（BIYFF 7s）</a></b></td>
+      <td>泰國<br>曼谷</td><td>2 月首週末<br><span style="color:var(--muted)">2026/2/7–8</span></td>
+      <td>U8＝2018、U9＝2017<br>7 人制</td>
+      <td>與 BIYC 同一主辦（Bangkok Soccer League），年齡對照表最明確。報名截止約 1 月中。</td></tr>
+
+    <tr><td><b><a href="https://www.jssl-singapore7s.com/">JSSL Singapore 7's</a></b></td>
+      <td>新加坡</td><td>3 月底<br>復活節連假<br><span style="color:var(--muted)">2027/3/25–28</span></td>
+      <td>U6–U16<br>7 人制</td>
+      <td><b>亞洲規模最大</b>：逾 400 隊、15–17 國、約 6,000 人。早鳥 SGD 1,200（原價 1,500）。同期有職業梯隊組（利物浦、巴薩等曾參賽）。</td></tr>
+
+    <tr><td><b><a href="https://www.joosports.com/">YC&amp;AC Golden Chance Cup</a></b></td>
+      <td>日本<br>橫濱</td><td>7 月<br><span style="color:var(--muted)">2026/7（TBC）</span></td>
+      <td><b>U9、U11</b><br>8 人制</td>
+      <td>場地為 1868 年創立的橫濱 YC&amp;AC，日本足球發源地。主辦 JOOSPORTS <b>提供中文（華語／粵語）服務</b>，對台灣球隊門檻最低。分 Grassroots／Challenger 兩級分組。</td></tr>
+
+    <tr><td><b><a href="https://hkboasfc.hk/boas-hkysl/">BOAS Hong Kong Youth Soccer League（HKYSL）</a></b></td>
+      <td>香港</td><td>聯賽制<br>全年多場次</td>
+      <td><b>U8</b> 起<br>5 人制</td>
+      <td>每組上限 16 隊，單日分組＋附加賽。屬聯賽非單次盃賽，適合長期參與。全年滾動收件，額滿為止。設最佳球員獎（可獲葡萄牙精英訓練營資格）。</td></tr>
+
+    <tr><td><b><a href="https://www.maximevents.asia/">Maxim Events 系列</a></b><br><span style="font-size:11.5px;color:var(--muted)">Maxim Cup KL／Penang／Langkawi／Melaka／Phuket／Brunei、Maxim Elite 系列</span></td>
+      <td>馬來西亞<br>（另有泰國<br>普吉、汶萊）</td>
+      <td>全年多場<br><span style="color:var(--muted)">Elite Penang 2026/10/30–11/1<br>Elite KL 2026/12/4–6</span></td>
+      <td>5–18 歲<br>U8＝2018 年後出生<br>U9＝2017 年後出生<br>7 人制為主</td>
+      <td><b>選擇最多、彈性最高</b>：全年 7 場國際賽，年逾 20,000 人次、60 國。獲 AFC 最佳草根賽事獎。同集團另營運馬來西亞全國青少年聯賽 Liga Suparimau。</td></tr>
+  </table>
+
+  <h3 style="font-size:13.5px;margin:16px 0 4px">確認無 U8／U9 組別（不需再查證）</h3>
+  <table class="card">
+    <tr><th style="width:200px">賽事</th><th style="width:auto">最低年齡組</th></tr>
+    <tr><td>Gothia Cup（瑞典）</td><td>U11</td></tr>
+    <tr><td>Dana Cup（丹麥）</td><td>U11</td></tr>
+    <tr><td>Norway Cup（挪威）</td><td>U10</td></tr>
+    <tr><td>Dallas Cup（美國）</td><td>U13</td></tr>
+    <tr><td>SingaCup（新加坡）</td><td>近年僅辦 U14／U16 及女子組，U8 自 2017 年後未再設組</td></tr>
+  </table>
+
+  <p style="font-size:11.5px;color:var(--muted);margin:12px 0 0;border-top:1px solid var(--line);padding-top:9px">
+    ⓘ 韓國、越南、菲律賓、印尼目前未查得對外開放報名且明確設有 U8／U9 組別的國際賽事。若你或其他人知道，歡迎透過上方收件匣提供連結。<br>
+    地緣與成本參考：<b>日本橫濱</b>（中文服務、航程短）與<b>香港</b>（航程最短、聯賽制）對 U8／U9 首次海外參賽門檻最低；<b>泰國曼谷</b>選擇最多但 12 月三場撞期；<b>新加坡 JSSL</b> 規模與競爭強度最高。
+  </p>
+</section>
+
+<footer>
+  資料來源（皆經官方網站／官方 PDF 驗證）：勝利聯賽官方賽程 PDF（使用者提供）、victoryleague.com.tw、ctfa.com.tw、formosasevens.com.tw、中華民國迷你足球協會、台灣國際足球邀請賽（原淡水盃）官方 Facebook。<br>
+  收錄範圍：台灣境內賽事（含在台舉辦之國際邀請賽）。海外賽事已封存，需要時可還原。<br>
+  自動化排程任務產出 — 所有判斷依 v3.0 規則決策；「待驗證」項目未納入正式行事曆。
+</footer>
+
+</div>
+
+<script>
+const S={registered:'已報名',open:'開放報名',closing:'即將截止',closed:'已截止／已結束',unverified:'待驗證',ineligible:'無法報名（年齡組不符）'};
+
+// d: 該月日期陣列（用於月曆標點）；ineligible 者不給 d
+const DATA=[
+ {y:2026,m:7,events:[
+   {d:[31],st:'closed',nm:'2026 台灣國際足球邀請賽（原淡水盃）開賽',meta:'新北淡水｜7/31–8/2 三日賽程，第 11 屆｜逾 2,000 人參與'},
+   {st:'ineligible',nm:'2026/27 台灣青年足球聯賽 報名開始（7/10）',meta:'CTFA × 勝利聯賽｜報名 7/10–8/9｜僅設 U14／U16／U19，無 U8／U9 組別 — 月曆不標點'},
+ ]},
+ {y:2026,m:8,events:[
+   {d:[1],st:'closed',nm:'2026 安聯小小世界盃 全國總決賽',meta:'台北｜U6／U8／U10／U12／U15｜全台七大賽區晉級隊伍｜報名 4/1–4/17 已結束｜<b>2027 年版預估 4 月初開放報名</b>'},
+   {d:[1,2],st:'closed',nm:'2026 台灣國際足球邀請賽（原淡水盃）',meta:'新北淡水｜7/31–8/2 舉行，第 11 屆｜逾 2,000 人參與｜本屆起由「淡水盃」正式更名升格｜2027 年版預估 7 月底–8 月初'},
+   {d:[5,6,7,8,9],st:'closed',nm:'2026 Formosa 7s 福爾摩沙國際七人制足球錦標賽',meta:'高雄楠梓足球場｜<b>U8–U16</b>｜192 隊 / 8–9 國 / 逾 9,000 人｜LALIGA 合辦、DAZN 轉播｜台灣境內規模最大且設 U8／U9 的賽事｜2027 年版預估 8 月上旬'},
+   {st:'ineligible',nm:'2026/27 台灣青年足球聯賽（CTFA × 勝利聯賽）',meta:'報名期 7/10–8/9｜僅設 U14／U16／U19，無 U8／U9 組別 — 月曆不標點'},
+ ]},
+ {y:2026,m:9,events:[
+   {d:[20],st:'registered',nm:'2026/27 勝利聯賽 Victory League',meta:'<b>賽季開打</b>｜U8／U9 已報名｜官方註明每隊每月僅出賽 2–3 場，非每個列出日期都會出賽'},
+ ]},
+ {y:2026,m:10,events:[
+   {d:[4],st:'registered',nm:'2026/27 勝利聯賽 Victory League',meta:'暫定賽程日'},
+   {d:[18,25],st:'registered',nm:'2026/27 勝利聯賽 Victory League',meta:'暫定賽程日'},
+ ]},
+ {y:2026,m:11,events:[
+   {d:[1,8],st:'registered',nm:'2026/27 勝利聯賽 Victory League',meta:'暫定賽程日'},
+   {d:[15,22,29],st:'registered',nm:'2026/27 勝利聯賽 Victory League',meta:'暫定賽程日'},
+ ]},
+ {y:2026,m:12,events:[
+   {d:[6,13],st:'registered',nm:'2026/27 勝利聯賽 Victory League',meta:'暫定賽程日｜本季 12 月僅此兩個日期'},
+ ]},
+ {y:2027,m:1,events:[
+   {d:[10,17,24],st:'registered',nm:'2026/27 勝利聯賽 Victory League',meta:'暫定賽程日'},
+   {st:'ineligible',nm:'2027 全國少年盃足球錦標賽（CTFA）',meta:'歷年於 1–2 月舉行｜官方競賽規程僅設公開男子四／五／六年級組及公開女子四年級組，無 U8／U9 組別 — 月曆不標點'},
+ ]},
+ {y:2027,m:2,events:[
+   {d:[7,14,21],st:'registered',nm:'2026/27 勝利聯賽 Victory League',meta:'暫定賽程日'},
+ ]},
+ {y:2027,m:3,events:[
+   {d:[7,14,21],st:'registered',nm:'2026/27 勝利聯賽 Victory League',meta:'暫定賽程日'},
+   {d:[25],st:'unverified',nm:'⏰ 提醒：安聯小小世界盃報名即將開放',meta:'建議於此日前設定提醒並開始追蹤中華民國迷你足球協會粉專與官網｜2026 年版為 4/1 開放報名'},
+ ]},
+ {y:2027,m:4,events:[
+   {d:[1],st:'unverified',nm:'2027 安聯小小世界盃 — 預估報名開放日',meta:'<b>U8 梯隊適用（設 U6／U8／U10／U12／U15）</b>｜2026 年版報名 4/1–4/17、全台七大賽區、巡迴預賽 5–8 月、決賽 8/1｜2027 年官方尚未公告 → 日期為歷年規律推估'},
+   {d:[11,18,25],st:'registered',nm:'2026/27 勝利聯賽 Victory League',meta:'暫定賽程日｜<b>本季官方公告賽程最後一個月</b>'},
+   {d:[17],st:'unverified',nm:'2027 安聯小小世界盃 — 預估報名截止日',meta:'2026 年版為 4/17 截止｜實際日期待官方公告'},
+ ]},
+ {y:2027,m:5,events:[
+   {st:'unverified',nm:'2026/27 勝利聯賽 全國總決賽',meta:'歷年於 5 月舉行，各區前 3 名晉級（超級聯賽與冠軍聯賽分兩個週末）｜本季官方暫定賽程僅公告至 4/25，全國賽日期待公告'},
+   {st:'unverified',nm:'2027/28 勝利聯賽 — 預估報名開放',meta:'歷年 5 月中開放、5/31 截止（額滿為止）｜上季 U6–U12 逾 240 隊報名，建議開放首週即完成報名'},
+ ]},
+];
+
+const WD=['日','一','二','三','四','五','六'];
+
+/* 滾動視窗：前一個月起算，共 12 個月。每次開啟頁面自動重算。 */
+const NOW=new Date();
+const TKEY=NOW.getFullYear()+'-'+(NOW.getMonth()+1)+'-'+NOW.getDate();
+const WINDOW=[];
+{
+  const s=new Date(NOW.getFullYear(),NOW.getMonth()-1,1);
+  for(let i=0;i<12;i++){
+    const d=new Date(s.getFullYear(),s.getMonth()+i,1);
+    WINDOW.push({y:d.getFullYear(),m:d.getMonth()+1});
+  }
+}
+const BYMONTH={};
+DATA.forEach(mo=>{BYMONTH[mo.y+'-'+mo.m]=mo.events;});
+
+function weekLabel(dateObj){
+  const d=new Date(dateObj);
+  const day=d.getDay();
+  const mon=new Date(d); mon.setDate(d.getDate()-((day+6)%7));
+  const sun=new Date(mon); sun.setDate(mon.getDate()+6);
+  const f=x=>`${x.getMonth()+1}/${x.getDate()}`;
+  return `${f(mon)} – ${f(sun)} 當週`;
+}
+
+let html='';
+WINDOW.forEach(w=>{
+  const mo={y:w.y,m:w.m,events:BYMONTH[w.y+'-'+w.m]||[]};
+  const first=new Date(mo.y,mo.m-1,1);
+  const days=new Date(mo.y,mo.m,0).getDate();
+  const lead=first.getDay();
+
+  // 月曆標點：排除 ineligible
+  const dotMap={};
+  mo.events.forEach(e=>{
+    if(e.st==='ineligible'||!e.d) return;
+    e.d.forEach(dd=>{(dotMap[dd]=dotMap[dd]||new Set()).add(e.st);});
+  });
+
+  let cells='';
+  for(let i=0;i<lead;i++) cells+='<td></td>';
+  for(let dd=1;dd<=days;dd++){
+    const dow=new Date(mo.y,mo.m-1,dd).getDay();
+    const isToday=(mo.y+'-'+mo.m+'-'+dd)===TKEY;
+    const cls=[dow===0?'sun':'',dow===6?'sat':'',dotMap[dd]?'has':'',isToday?'today':''].filter(Boolean).join(' ');
+    let dots='';
+    if(dotMap[dd]) dots='<div class="dots">'+[...dotMap[dd]].map(s=>`<i class="dot ${s}" title="${S[s]}"></i>`).join('')+'</div>';
+    cells+=`<td class="${cls}"><div class="dnum">${dd}</div>${dots}</td>`;
+    if(dow===6&&dd<days) cells+='</tr><tr>';
+  }
+
+  // 右側依「賽事週」分組
+  const groups=new Map();
+  mo.events.forEach(e=>{
+    const key=e.d&&e.d.length? weekLabel(new Date(mo.y,mo.m-1,e.d[0])) : '本月／日期未定';
+    if(!groups.has(key)) groups.set(key,[]);
+    groups.get(key).push(e);
+  });
+
+  let right='';
+  groups.forEach((evs,k)=>{
+    right+=`<div class="wk"><div class="wklabel">${k}</div>`;
+    evs.forEach(e=>{
+      const dl=e.d? `${mo.m}/${e.d.length>1? e.d[0]+'–'+e.d[e.d.length-1] : e.d[0]}` : '日期未定';
+      right+=`<div class="ev ${e.st==='ineligible'?'ineligible':''}">
+        <span class="bar" style="background:var(--${e.st})"></span>
+        <div class="body">
+          <div class="nm">${e.nm}<span class="tag ${e.st}">${S[e.st]}</span></div>
+          <div class="meta"><b>${dl}</b> ｜ ${e.meta}</div>
+        </div></div>`;
+    });
+    right+='</div>';
+  });
+
+  const isCur=(w.y===NOW.getFullYear()&&w.m===NOW.getMonth()+1);
+  if(!right) right='<div class="empty">本月無賽事</div>';
+
+  html+=`<div class="month${isCur?' cur':''}">
+    <div>
+      <div class="mtitle">${mo.y} 年 ${mo.m} 月${isCur?' <span class="nowtag">本月</span>':''}</div>
+      <table class="cal"><thead><tr>${WD.map(w=>`<th>${w}</th>`).join('')}</tr></thead>
+      <tbody><tr>${cells}</tr></tbody></table>
+    </div>
+    <div>
+      <div class="mtitle">賽事清單</div>
+      <div class="weeks">${right}</div>
+    </div>
+  </div>`;
+});
+document.getElementById('cal').innerHTML=html;
+</script>
+</body>
+</html>
