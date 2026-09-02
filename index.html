@@ -133,7 +133,7 @@
 
 <header class="top">
   <h1>FUTURO U8／U9 足球賽事情報行事曆</h1>
-  <div class="sub">賽事情報系統 v3.0 ｜ 最後更新：2026 年 9 月 2 日 06:00 ｜ 月曆自動顯示前一個月起共 12 個月 ｜ 對象梯隊：2017、2018 出生<br>
+  <div class="sub">賽事情報系統 v3.0 ｜ 最後更新：2026 年 9 月 2 日 06:00 ｜ 月曆自動顯示當月起共 12 個月 ｜ 對象梯隊：2017、2018 出生<br>
   <b style="color:#0f172a">賽事清單已改為結構化欄位</b>：綠底為重點、紅底為警示、藍底為建議行動；查證脈絡與歷年數據收在每筆下方的「▸ 詳細與查證來源」，點擊展開。<br>
   <b style="color:#0f172a">收錄範圍：台灣境內賽事</b>（含國際邀請賽），<b>不收錄室內五人制（futsal）</b>。海外賽事列為參考置底。</div>
 </header>
@@ -1959,12 +1959,12 @@ function metaHTML(e,dl){
 }
 
 
-/* 滾動視窗：前一個月起算，共 12 個月。每次開啟頁面自動重算。 */
+/* 滾動視窗：當月起算，共 12 個月。每次開啟頁面自動重算。 */
 const NOW=new Date();
 const TKEY=NOW.getFullYear()+'-'+(NOW.getMonth()+1)+'-'+NOW.getDate();
 const WINDOW=[];
 {
-  const s=new Date(NOW.getFullYear(),NOW.getMonth()-1,1);
+  const s=new Date(NOW.getFullYear(),NOW.getMonth(),1);
   for(let i=0;i<12;i++){
     const d=new Date(s.getFullYear(),s.getMonth()+i,1);
     WINDOW.push({y:d.getFullYear(),m:d.getMonth()+1});
